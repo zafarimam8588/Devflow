@@ -1,3 +1,4 @@
+//
 import {
   ClerkProvider,
   SignInButton,
@@ -9,6 +10,7 @@ import "./globals.css";
 import React from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/context/themeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,7 +55,7 @@ export default function RootLayout({
           <SignedIn>
             <UserButton />
           </SignedIn>
-          {children}
+          <ThemeProvider>{children}</ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
