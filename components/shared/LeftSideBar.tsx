@@ -32,7 +32,7 @@ const LeftSidebar = () => {
                 alt={item.label}
                 width={20}
                 height={20}
-                className={`${isActive ? "" : "invert-colors"}`}
+                className={`${isActive ? "" : "invert-colors"} size-auto`}
               />
               <p
                 className={`${
@@ -48,7 +48,7 @@ const LeftSidebar = () => {
 
       {/* Not logged User */}
       <SignedOut>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pt-6">
           {/* Log in */}
           <Link href="/sign-in">
             <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
@@ -73,7 +73,7 @@ const LeftSidebar = () => {
                 alt="sign up"
                 width={20}
                 height={20}
-                className="invert-colors lg:hidden"
+                className="invert-colors size-auto lg:hidden"
               />
               <span className="max-lg:hidden">Sign Up</span>
             </Button>
