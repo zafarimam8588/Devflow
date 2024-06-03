@@ -25,7 +25,7 @@ const questions = [
     upvotes: 10,
     answers: [],
     views: 100,
-    createdAt: new Date("2024-0-01T12:00:00.000Z"),
+    createdAt: new Date("2024-05-01T12:00:00.000Z"),
   },
   {
     _id: "2",
@@ -44,6 +44,24 @@ const questions = [
     answers: [],
     views: 50,
     createdAt: new Date("2023-09-02T14:30:00.000Z"),
+  },
+  {
+    _id: "3",
+    title:
+      "GitHub repository tips and tricks for beginners and senior developers",
+    tags: [
+      { _id: "1", name: "github" },
+      { _id: "2", name: "git" },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      picture: "/assets/icons/avatar.svg",
+    },
+    upvotes: 10,
+    answers: [],
+    views: 100,
+    createdAt: new Date("2024-05-01T12:00:00.000Z"),
   },
 ];
 
