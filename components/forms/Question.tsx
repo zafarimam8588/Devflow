@@ -20,6 +20,7 @@ import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { createQuestion } from "@/lib/actions/question.action";
 
 const type: any = "create";
 const Question = () => {
@@ -37,9 +38,9 @@ const Question = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof QuestionSchema>) {
+  async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true);
-
+    await createQuestion({});
     try {
       // make an async call to your API -> Create a question
       // contain all form data
@@ -50,14 +51,7 @@ const Question = () => {
     }
   }
 
-  /**
-   * Handles 'Enter' key events for adding tags to a form field.
-   * Triggers tag addition, validation, or form submission.
-   *
-   * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
-   * @param {any} field - The field to which this function is associated.
-   *
-   */
+  // LOGIC TO ADD TAGS *********
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     field: any
@@ -89,10 +83,7 @@ const Question = () => {
     }
   };
 
-  /**
-   * Function to remove tags from tag list
-   *
-   */
+  // FUNCTION TO REMOVE TAG
   const handleTagRemove = (tag: string, field: any) => {
     const newTags = field.value.filter((t: string) => t !== tag);
 
