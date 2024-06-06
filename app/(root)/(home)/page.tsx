@@ -5,67 +5,14 @@ import NoResult from "@/components/shared/NoResult";
 import Localsearchbar from "@/components/shared/search/Localsearchbar";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
+import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 import React from "react";
 
-const questions = [
-  {
-    _id: "1",
-    title:
-      "GitHub repository tips and tricks for beginners and senior developers",
-    tags: [
-      { _id: "1", name: "github" },
-      { _id: "2", name: "git" },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      picture: "/assets/icons/avatar.svg",
-    },
-    upvotes: 10,
-    answers: [],
-    views: 100,
-    createdAt: new Date("2024-05-01T12:00:00.000Z"),
-  },
-  {
-    _id: "2",
-    title: "How to center a div?",
-    tags: [
-      { _id: "1", name: "html" },
-      { _id: "2", name: "css" },
-      { _id: "3", name: "flexbox" },
-    ],
-    author: {
-      _id: "2",
-      name: "Jane Smith",
-      picture: "/assets/icons/avatar.svg",
-    },
-    upvotes: 5,
-    answers: [],
-    views: 50,
-    createdAt: new Date("2023-09-02T14:30:00.000Z"),
-  },
-  {
-    _id: "3",
-    title:
-      "GitHub repository tips and tricks for beginners and senior developers",
-    tags: [
-      { _id: "1", name: "github" },
-      { _id: "2", name: "git" },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      picture: "/assets/icons/avatar.svg",
-    },
-    upvotes: 10,
-    answers: [],
-    views: 100,
-    createdAt: new Date("2024-05-01T12:00:00.000Z"),
-  },
-];
+const Home = async () => {
+  const result = await getQuestions({});
+  console.log(result.questions);
 
-const Home = () => {
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -95,8 +42,8 @@ const Home = () => {
       <HomeFilters />
       {/* Questions */}
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map((question) => {
+        {result.questions.length > 0 ? (
+          result.questions.map((question) => {
             return (
               <QuestionCard
                 key={question._id}

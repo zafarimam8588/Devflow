@@ -3,8 +3,10 @@
 import Question from "@/databse/question.model";
 import { connectToDatabase } from "../mongoose";
 import Tag from "@/databse/tag.model";
+import { CreateQuestionParams, getQuestionsParams } from "./shared.types";
+import User from "@/databse/user.model";
 
-export async function createQuestion(params) {
+export async function createQuestion(params: CreateQuestionParams) {
   try {
     // connect to db
     connectToDatabase();
@@ -48,4 +50,26 @@ export async function createQuestion(params) {
     // Increment author's reputation by +5 points because
     // he created a question
   } catch (error) {}
+}
+
+export async function getQuestions(params: getQuestionsParams) {
+  try {
+    connectToDatabase();
+
+    const questions = await Question.find({})
+      .populate({
+        path: "tags",
+        model: Tag,
+      })
+      .populate({
+        path: "author",
+        model: User,
+      })
+      .sort({ createdAt: -1 });
+
+    return { questions };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }

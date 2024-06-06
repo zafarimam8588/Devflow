@@ -55,6 +55,7 @@ const Question = ({ mongoUserId }: props) => {
         content: values.explanation,
         tags: values.tags,
         author: JSON.parse(mongoUserId),
+        path: pathname,
       });
       // contain all form data
       // navigate to home page
