@@ -5,6 +5,7 @@ import { connectToDatabase } from "../mongoose";
 import Tag from "@/databse/tag.model";
 import { CreateQuestionParams, getQuestionsParams } from "./shared.types";
 import User from "@/databse/user.model";
+import { revalidatePath } from "next/cache";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -49,6 +50,8 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     // Increment author's reputation by +5 points because
     // he created a question
+    // revalidatePath allows you to purge cached data on-demand for a specific path.
+    revalidatePath(path);
   } catch (error) {}
 }
 
