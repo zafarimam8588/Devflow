@@ -7,11 +7,11 @@ import { createUser, updateUser, deleteUser } from "@/lib/actions/user.action";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const NEXT_CLERK_WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET;
 
-  if (!WEBHOOK_SECRET) {
+  if (!NEXT_CLERK_WEBHOOK_SECRET) {
     throw new Error(
-      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
+      "Please add NEXT_CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
-  const wh = new Webhook(WEBHOOK_SECRET);
+  const wh = new Webhook(NEXT_CLERK_WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
 
@@ -75,6 +75,7 @@ export async function POST(req: Request) {
       evt.data;
 
     // Create a new user in the database
+    console.log("Inside update ");
     const mongoUser = await updateUser({
       clerkId: id,
       updateData: {
