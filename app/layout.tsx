@@ -1,11 +1,5 @@
-//
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+/* eslint-disable camelcase */
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import React from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
