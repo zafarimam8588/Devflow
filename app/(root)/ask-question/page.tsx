@@ -1,16 +1,16 @@
 import Question from "@/components/forms/Question";
 import { getUserbyId } from "@/lib/actions/user.action";
-// import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const AskQuestion = async () => {
-  // const {userId} = auth();
-  const userId = "123456789"; // dummy user for temp testing
+  const { userId } = auth();
+  // const userId = "123456789"; // dummy user for temp testing
 
-  if (!userId) redirect("/sign-in");
+  if (!userId) return redirect("/sign-in");
 
   const mongoUser = await getUserbyId({ userId });
-  // console.log(mongoUser);
+  if (!mongoUser) redirect("/sign-in"); // YOU NEED TO REMOVE THIS
 
   return (
     <div>
