@@ -1,7 +1,8 @@
 "use server";
 import User from "@/databse/user.model";
-import { GetTopInteractedTagsParams } from "./shared.types";
+import { GetAllTagsParams, GetTopInteractedTagsParams } from "./shared.types";
 import { connectToDatabase } from "../mongoose";
+import Tag from "@/databse/tag.model";
 
 export async function getTopInterectedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -30,6 +31,19 @@ export async function getTopInterectedTags(params: GetTopInteractedTagsParams) {
         name: "tag2",
       },
     ];
+  } catch (error) {
+    console.log("MongoDB connection failed", error);
+    throw error;
+  }
+}
+
+export async function getAllTags(params: GetAllTagsParams) {
+  try {
+    connectToDatabase();
+
+    const tags = await Tag.find({});
+
+    return { tags };
   } catch (error) {
     console.log("MongoDB connection failed", error);
     throw error;

@@ -26,6 +26,7 @@ export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
     userData.username = `zafarimam${Math.floor(Math.random() * 1000 + 1000)}`;
+    console.log(userData.username);
 
     const newUser = await User.create(userData);
 
