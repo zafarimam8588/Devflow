@@ -15,6 +15,12 @@ export interface CreateQuestionParams {
   author: Schema.Types.ObjectId | IUser;
   path: string;
 }
+export interface CreateAnswerParams {
+  content: string;
+  author: string; // User ID
+  question: string; // Question ID
+  path: string;
+}
 
 export interface GetQuestionByIdParams {
   questionId: string;
