@@ -3,6 +3,7 @@ import AllAnswers from "@/components/shared/AllAnswer";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserbyId } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
@@ -10,7 +11,7 @@ import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-const QuestionDetail = async ({ params, searchParams }) => {
+const QuestionDetail = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
 
   // Access to mongo user
@@ -39,7 +40,18 @@ const QuestionDetail = async ({ params, searchParams }) => {
             </p>
           </Link>
 
-          <div className="flex justify-end">{/* TODO */}Voting</div>
+          <div className="flex justify-end">
+            <Votes
+              type="Question"
+              itemId={JSON.stringify(result._id)}
+              userId={JSON.stringify(mongoUser._id)}
+              upvotes={result.upvotes.length}
+              hasUpvoted={result.upvotes.includes(mongoUser._id)}
+              downvotes={result.downvotes.length}
+              hasDownvoted={result.downvotes.includes(mongoUser._id)}
+              hasSaved={mongoUser?.saved.includes(result._id)}
+            />
+          </div>
         </div>
 
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
