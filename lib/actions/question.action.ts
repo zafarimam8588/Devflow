@@ -5,12 +5,15 @@ import { connectToDatabase } from "../mongoose";
 import Tag from "@/databse/tag.model";
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
   GetQuestionByIdParams,
   QuestionVoteParams,
   getQuestionsParams,
 } from "./shared.types";
 import User from "@/databse/user.model";
 import { revalidatePath } from "next/cache";
+import Interaction from "@/databse/interaction.model";
+import Answer from "@/databse/answer.model";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -171,6 +174,34 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     }
 
     // Decrement author's reputation
+
+    revalidatePath(path);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, path } = params;
+
+    // Delete the question
+    await Question.deleteOne({ _id: questionId });
+
+    // Delete all answers relative to the question
+    await Answer.deleteMany({ question: questionId });
+
+    // Delete all interaction relative to the question
+    await Interaction.deleteMany({ question: questionId });
+
+    // Update all tags that include the question
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
 
     revalidatePath(path);
   } catch (error) {
