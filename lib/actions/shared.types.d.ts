@@ -115,3 +115,9 @@ export interface GetQuestionsByTagIdParams {
 export interface GetUserByIdParams {
   userId: string;
 }
+
+export interface GetUserStatsParams {
+  userId: string;
+  page?: number;
+  pageSize?: number;
+}

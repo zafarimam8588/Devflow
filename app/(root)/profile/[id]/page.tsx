@@ -9,6 +9,7 @@ import Link from "next/link";
 import { getJoinedDate } from "@/lib/utils";
 import ProfileLink from "@/components/shared/ProfileLink";
 import Stats from "@/components/shared/Stats";
+import QuestionTab from "@/components/shared/QuestionTab";
 
 const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -98,7 +99,13 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
           </TabsList>
 
           {/* TOP POSTS */}
-          <TabsContent value="top-posts">POSTS</TabsContent>
+          <TabsContent value="top-posts">
+            <QuestionTab
+              searchParams={searchParams}
+              userId={userInfo.user._id}
+              clerkId={clerkId}
+            />
+          </TabsContent>
           {/* ANSWERS */}
           <TabsContent value="answers">ANSWERS</TabsContent>
         </Tabs>
