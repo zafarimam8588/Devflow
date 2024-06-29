@@ -52,3 +52,54 @@ export interface GetAllTagsParams {
   filter?: string;
   searchQuery?: string;
 }
+<<<<<<< Updated upstream
+=======
+
+export interface GetAnswersParams {
+  questionId: string;
+  sortBy?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface QuestionVoteParams {
+  questionId: string;
+  userId: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+  path: string;
+}
+
+export interface AnswerVoteParams {
+  answerId: string;
+  userId: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+  path: string;
+}
+
+export interface ToggleSaveQuestionParams {
+  userId: string;
+  questionId: string;
+  path: string;
+}
+
+export interface GetSavedQuestionsParams {
+  clerkId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
+
+export interface ViewQuestionParams {
+  questionId: string;
+  userId: string | undefined;
+}
+export interface GetQuestionsByTagIdParams {
+  tagId: string;
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+}
+>>>>>>> Stashed changes
