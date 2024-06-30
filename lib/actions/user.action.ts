@@ -102,16 +102,27 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    // const { page = 1, pageSize = 20, filter, searchQuery } = params;
+    const { searchQuery } = params;
+    console.log(searchQuery);
+
+    const query: FilterQuery<typeof User> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { name: { $regex: new RegExp(searchQuery, "i") } },
+        { username: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
 
     /**
      * All users newest on the top
      */
-    const users = await User.find({}).sort({ createdAt: -1 });
+    const users = await User.find(query).sort({ createdAt: -1 });
+    console.log(users);
 
     return { users };
   } catch (error) {
-    console.log("⛔ MongoDB connection failed ⛔", error);
+    console.log(" MongoDB connection failed ", error);
     throw error;
   }
 }
