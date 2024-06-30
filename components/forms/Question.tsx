@@ -20,27 +20,32 @@ import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 
-const type: any = "create";
-interface props {
+interface Props {
+  type?: string;
   mongoUserId: string;
+  questionDetails?: string;
 }
-const Question = ({ mongoUserId }: props) => {
+const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
+  // In edit mode data will be shown by default
+  const parsedQuestionDetails = JSON.parse(questionDetails || "");
+  const groupedTags = parsedQuestionDetails.tags.map((tag: any) => tag.name);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parsedQuestionDetails.title || "",
+      explanation: parsedQuestionDetails.content || "",
+      tags: groupedTags || [],
     },
   });
 
@@ -49,17 +54,32 @@ const Question = ({ mongoUserId }: props) => {
     setIsSubmitting(true);
 
     try {
-      // make an async call to your API -> Create a question
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
-        path: pathname,
-      });
-      // contain all form data
-      // navigate to home page
-      router.push("/");
+      if (type === "edit") {
+        /**
+         * Edit a question
+         */
+        await editQuestion({
+          questionId: parsedQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+        // navigate to the question detail page
+        router.push(`/question/${parsedQuestionDetails._id}`);
+      } else {
+        /**
+         * Cretate a new Question
+         */
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+        // navigate to home page
+        router.push("/");
+      }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -150,7 +170,7 @@ const Question = ({ mongoUserId }: props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue=""
+                  initialValue={parsedQuestionDetails.content || ""}
                   init={{
                     height: 350,
                     menubar: false,
@@ -201,6 +221,7 @@ const Question = ({ mongoUserId }: props) => {
                 {/* Fragment because the FormControl can contain only one element */}
                 <>
                   <Input
+                    disabled={type === "edit"}
                     className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
@@ -213,17 +234,19 @@ const Question = ({ mongoUserId }: props) => {
                         return (
                           <Badge
                             key={tag}
-                            className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
+                            className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 uppercase"
                           >
                             {tag}
-                            <Image
-                              src="assets/icons/close.svg"
-                              alt="close icon"
-                              width={12}
-                              height={12}
-                              className="cursor-pointer object-contain invert-0 dark:invert"
-                              onClick={() => handleTagRemove(tag, field)}
-                            />
+                            {type !== "edit" && (
+                              <Image
+                                src="/assets/icons/close.svg"
+                                alt="close icon"
+                                width={12}
+                                height={12}
+                                className="cursor-pointer object-contain invert-0 dark:invert"
+                                onClick={() => handleTagRemove(tag, field)}
+                              />
+                            )}
                           </Badge>
                         );
                       })}
