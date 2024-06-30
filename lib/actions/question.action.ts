@@ -15,6 +15,7 @@ import User from "@/databse/user.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/databse/interaction.model";
 import Answer from "@/databse/answer.model";
+import { FilterQuery } from "mongoose";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -68,7 +69,21 @@ export async function getQuestions(params: getQuestionsParams) {
   try {
     await connectToDatabase();
 
-    const questions = await Question.find({})
+    /**
+     * Search functionality
+     */
+    const { searchQuery } = params;
+    console.log("searchQuery is" + searchQuery);
+    const query: FilterQuery<typeof Question> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { content: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    const questions = await Question.find(query)
       .populate({
         path: "tags",
         model: Tag,
