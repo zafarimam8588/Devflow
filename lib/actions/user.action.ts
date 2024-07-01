@@ -102,7 +102,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
     console.log(searchQuery);
 
     const query: FilterQuery<typeof User> = {};
@@ -117,8 +117,25 @@ export async function getAllUsers(params: GetAllUsersParams) {
     /**
      * All users newest on the top
      */
-    const users = await User.find(query).sort({ createdAt: -1 });
-    console.log(users);
+    let sortOption = {};
+    switch (filter) {
+      case "new_users":
+        sortOption = { joinedAt: -1 };
+        break;
+
+      case "old_users":
+        sortOption = { joinedAt: 1 };
+        break;
+
+      case "top_contributors":
+        sortOption = { reputation: -1 };
+        break;
+
+      default:
+        break;
+    }
+
+    const users = await User.find(query).sort(sortOption);
 
     return { users };
   } catch (error) {
