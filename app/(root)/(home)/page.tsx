@@ -15,6 +15,7 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
   console.log("................" + searchParams.p);
   const result = await getQuestions({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
   // console.log(result.questions);
 
