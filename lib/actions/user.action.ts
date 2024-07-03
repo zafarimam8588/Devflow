@@ -101,9 +101,11 @@ export async function deleteUser(params: DeleteUserParams) {
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
 
-    const { searchQuery, filter } = params;
-    console.log(searchQuery);
+    // for Pagination => caluclate the number of posts to skip
+    // based on the pageNumber and pageSize
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof User> = {};
 
@@ -135,9 +137,18 @@ export async function getAllUsers(params: GetAllUsersParams) {
         break;
     }
 
-    const users = await User.find(query).sort(sortOption);
+    const users = await User.find(query)
+      .sort(sortOption)
+      .skip(skipAmount)
+      .limit(pageSize);
 
-    return { users };
+    /**
+     * Pagination
+     */
+    const totalUsers = await User.countDocuments(query);
+    const isNext = totalUsers > skipAmount + users.length;
+
+    return { users, isNext };
   } catch (error) {
     console.log(" MongoDB connection failed ", error);
     throw error;

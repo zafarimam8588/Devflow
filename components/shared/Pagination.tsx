@@ -25,6 +25,10 @@ const Pagination = ({ pageNumber, isNext }: Props) => {
 
     router.push(newUrl);
   };
+  // HIDE THE PAGINATION COMPONENT IF NOT ENOUGH CONTENT FOR PAGE 2
+  if (!isNext && pageNumber === 1) {
+    return null;
+  }
 
   return (
     <div className="flex w-full items-center justify-center gap-2">
