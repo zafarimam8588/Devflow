@@ -72,7 +72,7 @@ export async function getQuestions(params: getQuestionsParams) {
     /**
      * Search functionality
      */
-    const { searchQuery, filter, page = 1, pageSize = 20 } = params;
+    const { searchQuery, filter, page = 1, pageSize = 20\ } = params;
 
     const skipAmount = (page - 1) * pageSize;
     console.log("searchQuery is" + searchQuery);
