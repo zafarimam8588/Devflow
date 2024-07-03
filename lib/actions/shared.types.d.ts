@@ -2,8 +2,8 @@ import { IUser } from "@/databse/user.model";
 import { Schema } from "mongoose";
 
 export interface getQuestionsParams {
-  page?: string;
-  pageSize?: string;
+  page?: number;
+  pageSize?: number;
   searchQuery?: string;
   filter?: string;
 }
