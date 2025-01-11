@@ -15,6 +15,7 @@ export interface CreateQuestionParams {
   author: Schema.Types.ObjectId | IUser;
   path: string;
 }
+
 export interface CreateAnswerParams {
   content: string;
   author: string; // User ID
@@ -25,6 +26,7 @@ export interface CreateAnswerParams {
 export interface GetQuestionByIdParams {
   questionId: string;
 }
+
 
 export interface CreateUserParams {
   clerkId: string;
@@ -43,6 +45,7 @@ export interface UpdateUserParams {
 export interface DeleteUserParams {
   clerkId: string;
 }
+
 
 export interface GetAllUsersParams {
   page?: number;
@@ -142,3 +145,4 @@ export interface SearchParams {
   query?: string | null;
   type?: string | null;
 }
+
