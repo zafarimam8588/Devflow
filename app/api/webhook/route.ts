@@ -92,6 +92,7 @@ export async function POST(req: Request) {
 
   if (eventType === "user.deleted") {
     const { id } = evt.data;
+    console.log("Inside delete ");
 
     const deletedUser = await deleteUser({ clerkId: id! });
 

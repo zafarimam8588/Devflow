@@ -28,8 +28,7 @@ interface Props {
   mongoUserId: string;
   questionDetails?: string;
 }
-const 
-Question = ({ type, mongoUserId, questionDetails }: Props) => {
+const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

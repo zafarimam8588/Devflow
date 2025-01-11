@@ -77,6 +77,7 @@ export async function POST(req: Request) {
       evt.data;
 
     // Create a new user in the database
+    console.log("inside update");
     const mongoUser = await updateUser({
       clerkId: id,
       updateData: {
@@ -95,6 +96,7 @@ export async function POST(req: Request) {
     const { id } = evt.data;
 
     const deletedUser = await deleteUser({ clerkId: id! });
+    console.log("inside delete");
 
     return NextResponse.json({ message: "OK", user: deletedUser });
   }
