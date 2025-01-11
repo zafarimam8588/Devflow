@@ -78,8 +78,6 @@ export async function deleteUser(params: DeleteUserParams) {
 
     if (!user) {
       throw new Error("User not found");
-
-      throw new Error(" User not found");
     }
 
     /**
