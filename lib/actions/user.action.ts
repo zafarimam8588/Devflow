@@ -2,7 +2,13 @@
 import User from "@/databse/user.model";
 import { connectToDatabase } from "../mongoose";
 
-import Question from "@/databse/question.model";
+import { revalidatePath } from "next/cache";
+import Tag from "@/databse/tag.model";
+import { FilterQuery } from "mongoose";
+import Answer from "@/databse/answer.model";
+import { BadgeCriteriaType } from "@/types";
+import { assignBadges } from "../utils";
+
 import {
   CreateUserParams,
   DeleteUserParams,
@@ -13,21 +19,7 @@ import {
   ToggleSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
-import { revalidatePath } from "next/cache";
-import Tag from "@/databse/tag.model";
-import { FilterQuery } from "mongoose";
-import Answer from "@/databse/answer.model";
-import { BadgeCriteriaType } from "@/types";
-import { assignBadges } from "../utils";
-
-import { revalidatePath } from "next/cache";
-import {
-  CreateUserParams,
-  DeleteUserParams,
-  UpdateUserParams,
-} from "./shared.types";
 import Question from "@/databse/question.model";
-
 
 export async function getUserbyId(params: GetUserByIdParams) {
   try {
@@ -43,13 +35,11 @@ export async function getUserbyId(params: GetUserByIdParams) {
 
 export async function createUser(userData: CreateUserParams) {
   try {
-
     await connectToDatabase();
     userData.username = `zafarimam${Math.floor(Math.random() * 1000 + 1000)}`;
     console.log(userData.username);
 
     connectToDatabase();
-
 
     const newUser = await User.create(userData);
 
@@ -62,11 +52,9 @@ export async function createUser(userData: CreateUserParams) {
 
 export async function updateUser(params: UpdateUserParams) {
   try {
-
     await connectToDatabase();
 
     connectToDatabase();
-
 
     const { clerkId, updateData, path } = params;
 
@@ -81,21 +69,17 @@ export async function updateUser(params: UpdateUserParams) {
 
 export async function deleteUser(params: DeleteUserParams) {
   try {
-
     await connectToDatabase();
 
     connectToDatabase();
-
 
     const { clerkId } = params;
     const user = await User.findOneAndDelete({ clerkId });
 
     if (!user) {
-
       throw new Error("User not found");
 
       throw new Error(" User not found");
-
     }
 
     /**
