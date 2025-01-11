@@ -4,7 +4,6 @@ import { connectToDatabase } from "../mongoose";
 
 import { revalidatePath } from "next/cache";
 import Tag from "@/databse/tag.model";
-import { FilterQuery } from "mongoose";
 import Answer from "@/databse/answer.model";
 import { BadgeCriteriaType } from "@/types";
 import { assignBadges } from "../utils";
@@ -20,6 +19,7 @@ import {
   UpdateUserParams,
 } from "./shared.types";
 import Question from "@/databse/question.model";
+import { FilterQuery } from "mongoose";
 
 export async function getUserbyId(params: GetUserByIdParams) {
   try {
@@ -39,8 +39,6 @@ export async function createUser(userData: CreateUserParams) {
     userData.username = `zafarimam${Math.floor(Math.random() * 1000 + 1000)}`;
     console.log(userData.username);
 
-    connectToDatabase();
-
     const newUser = await User.create(userData);
 
     return newUser;
@@ -53,8 +51,6 @@ export async function createUser(userData: CreateUserParams) {
 export async function updateUser(params: UpdateUserParams) {
   try {
     await connectToDatabase();
-
-    connectToDatabase();
 
     const { clerkId, updateData, path } = params;
 
@@ -70,8 +66,6 @@ export async function updateUser(params: UpdateUserParams) {
 export async function deleteUser(params: DeleteUserParams) {
   try {
     await connectToDatabase();
-
-    connectToDatabase();
 
     const { clerkId } = params;
     const user = await User.findOneAndDelete({ clerkId });
