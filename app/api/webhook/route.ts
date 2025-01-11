@@ -6,7 +6,49 @@ import { NextResponse } from "next/server";
 import { createUser, updateUser, deleteUser } from "@/lib/actions/user.action";
 
 export async function POST(req: Request) {
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
+  const allowedOrigin = "https://code-flow-rust.vercel.app"; // Your frontend URL
+
+  // Get headers using next/headers function
+  const headerPayload = headers(); // This returns a ReadonlyHeaders object
+
+  // Access headers from the returned ReadonlyHeaders object
+  const origin = headerPayload.get("Origin");
+  const svix_id = headerPayload.get("svix-id");
+  const svix_timestamp = headerPayload.get("svix-timestamp");
+  const svix_signature = headerPayload.get("svix-signature");
+
+  // If there are no headers, error out
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    return new Response("Error occurred -- no svix headers", { status: 400 });
+  }
+
+  // Allow only specific origin (your frontend URL) to send requests
+  if (origin && origin !== allowedOrigin) {
+    return new Response("Forbidden", { status: 403 });
+  }
+
+  // CORS headers to allow the frontend to interact with the server
+  const responseHeaders = new Headers();
+  responseHeaders.set("Access-Control-Allow-Origin", allowedOrigin);
+  responseHeaders.set("Access-Control-Allow-Methods", "POST");
+  responseHeaders.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, svix-id, svix-timestamp, svix-signature"
+  );
+  responseHeaders.set("Access-Control-Allow-Credentials", "true"); // Allows credentials (cookies)
+
+  // Handle preflight request
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: responseHeaders,
+    });
+  }
+
+  // Get the body
+  const payload = await req.json();
+  const body = JSON.stringify(payload);
+
   const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -14,23 +56,6 @@ export async function POST(req: Request) {
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
-
-  // Get the headers
-  const headerPayload = headers();
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
-
-  // If there are no headers, error out
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error occured -- no svix headers", {
-      status: 400,
-    });
-  }
-
-  // Get the body
-  const payload = await req.json();
-  const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
@@ -46,9 +71,7 @@ export async function POST(req: Request) {
     }) as WebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
-    return new Response("Error occured", {
-      status: 400,
-    });
+    return new Response("Error occurred", { status: 400 });
   }
 
   // ALL THE LOGIC WILL BE WRITTEN FROM HERE
