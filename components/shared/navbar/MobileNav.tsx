@@ -57,7 +57,7 @@ const MobileNav = () => {
       {/* THIS WILL TRIGGER/OPEN THE SHEET ON CLICKING */}
       <SheetTrigger asChild>
         <Image
-          src="assets/icons/hamburger.svg"
+          src="/assets/icons/hamburger.svg"
           alt="menu"
           width={36}
           height={36}
