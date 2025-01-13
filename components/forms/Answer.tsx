@@ -133,7 +133,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
                 height={12}
                 className="object-contain"
               />
-              Generate AI Answer : <></>
+              <p className="pointer-events-none">Generate AI Answer</p> : <></>
             </>
           )}
         </Button>
