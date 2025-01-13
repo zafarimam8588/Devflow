@@ -23,7 +23,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: zafar8588/devflow:v1
+          tags: zafar8588/devflow:${{ github.run_number }}
 
       - name: Verify Pushed Image
         run: docker pull zafar8588/devflow:${{ github.run_number }}
@@ -39,5 +39,7 @@ jobs:
             sudo docker pull zafar8588/devflow:$IMAGE_TAG
             sudo docker stop web-app || true
             sudo docker rm web-app || true
-            sudo docker run -d --name web-app -p 3000:3000 zafar8588/devflow:$IMAGE_TAG
+            sudo docker run -d --name web-app -p 3000:3000 \
+              --env-file /home/ubuntu/codeflow/.env \
+              zafar8588/devflow:$IMAGE_TAG
             sudo docker ps | grep web-app
