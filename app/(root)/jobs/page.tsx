@@ -25,9 +25,9 @@ export default function JobsPage() {
             Something Amazing Is Coming
           </h1>
           <p className="text-muted-foreground text-lg dark:text-slate-100">
-            We're crafting a revolutionary jobs platform that will transform
-            your career journey. Our team of experts is working around the clock
-            to bring you something extraordinary.
+            WeWe&apos;rere crafting a revolutionary jobs platform that will
+            transform your career journey. Our team of experts is working around
+            the clock to bring you something extraordinary.
           </p>
         </div>
 
