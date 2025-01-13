@@ -9,6 +9,7 @@ import { connectToDatabase } from "../mongoose";
 import Tag, { ITag } from "@/databse/tag.model";
 import Question from "@/databse/question.model";
 import { FilterQuery } from "mongoose";
+import Interaction from "@/databse/interaction.model";
 
 export async function getTopInterectedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -18,27 +19,38 @@ export async function getTopInterectedTags(params: GetTopInteractedTagsParams) {
 
     const user = await User.findById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-    /**
-     * Find interactions for the user and group by tags
-     *
-     */
-    // TODO: Interactions...
+    const userInteractions = await Interaction.find({ user: user._id })
+      .populate("tags")
+      .exec();
 
-    // Mock tags
-    return [
-      {
-        _id: "1",
-        name: "tag",
-      },
-      {
-        _id: "2",
-        name: "tag2",
-      },
-    ];
+    const userTags = userInteractions.reduce((tags, interaction) => {
+      if (interaction.tags) {
+        tags = tags.concat(interaction.tags);
+      }
+      return tags;
+    }, []);
+
+    // Count the occurrences of each tag
+    const tagCountMap = userTags.reduce((countMap: any, tag: any) => {
+      countMap.set(tag, (countMap.get(tag) || 0) + 1);
+      return countMap;
+    }, new Map());
+
+    // Sort tags based on count in descending order
+    const sortedTags = Array.from(tagCountMap.entries()).sort(
+      (a: any, b: any) => b[1] - a[1]
+    );
+
+    // Get the top 3 tags
+    const top3Tags = sortedTags.slice(0, 2).map((tag: any) => tag[0]);
+
+    return top3Tags;
   } catch (error) {
-    console.log("MongoDB connection failed", error);
+    console.log(error);
     throw error;
   }
 }
