@@ -37,9 +37,9 @@ jobs:
           script: |
             IMAGE_TAG=${{ github.run_number }}
             sudo docker pull zafar8588/devflow:$IMAGE_TAG
-            sudo docker stop web-app || true
-            sudo docker rm web-app || true
-            sudo docker run -d --name web-app -p 3000:3000 \
+            sudo docker stop codeflow || true
+            sudo docker rm codeflow || true
+            sudo docker run -d --name codeflow -p 3001:3000 \
               --env-file /home/ubuntu/codeflow/.env \
               zafar8588/devflow:$IMAGE_TAG
-            sudo docker ps | grep web-app
+            sudo docker ps | grep codeflow
