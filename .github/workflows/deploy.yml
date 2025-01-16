@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
@@ -36,10 +37,16 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             IMAGE_TAG=${{ github.run_number }}
-            sudo docker pull zafar8588/devflow:$IMAGE_TAG
+            # Stop and remove the running container
             sudo docker stop codeflow || true
             sudo docker rm codeflow || true
+            # Remove the previous image
+            sudo docker rmi $(sudo docker images -q zafar8588/devflow:$IMAGE_TAG) || true
+            # Pull the new image
+            sudo docker pull zafar8588/devflow:$IMAGE_TAG
+            # Run the new container
             sudo docker run -d --name codeflow -p 4000:4000 \
               --env-file /home/ubuntu/devflow/.env \
               zafar8588/devflow:$IMAGE_TAG
+            # Check the running container
             sudo docker ps | grep codeflow
