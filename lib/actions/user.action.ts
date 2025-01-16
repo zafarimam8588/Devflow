@@ -36,8 +36,8 @@ export async function getUserbyId(params: GetUserByIdParams) {
 export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
-    const fullName = `${userData.name}${Math.floor(Math.random() * 1000 + 1000)}`;
-    userData.username = fullName.split(" ")[0];
+    const fullName = userData.name;
+    userData.username = `${fullName.split(" ")[0]}${Math.floor(Math.random() * 1000 + 1000)}`;
 
     console.log(userData.username);
 
