@@ -39,7 +39,7 @@ jobs:
             sudo docker pull zafar8588/devflow:$IMAGE_TAG
             sudo docker stop codeflow || true
             sudo docker rm codeflow || true
-            sudo docker run -d --name codeflow -p 3001:3000 \
+            sudo docker run -d --name codeflow -p 4000:4000 \
               --env-file /home/ubuntu/codeflow/.env \
               zafar8588/devflow:$IMAGE_TAG
             sudo docker ps | grep codeflow
