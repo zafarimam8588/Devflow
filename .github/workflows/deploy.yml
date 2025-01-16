@@ -40,6 +40,6 @@ jobs:
             sudo docker stop codeflow || true
             sudo docker rm codeflow || true
             sudo docker run -d --name codeflow -p 4000:4000 \
-              --env-file /home/ubuntu/codeflow/.env \
+              --env-file /home/ubuntu/devflow/.env \
               zafar8588/devflow:$IMAGE_TAG
             sudo docker ps | grep codeflow
