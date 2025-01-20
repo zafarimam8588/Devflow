@@ -258,7 +258,7 @@ After following all the instructions above, we'll want to create a new webhook o
 Download or clone this repo by using the link below:
 
 ```bash
-git clone https://github.com/ladunjexa/nextjs14-devoverflow.git
+git clone https://github.com/zafarimam8588/Devflow.git
 ```
 
 **Step 2:**
@@ -361,7 +361,8 @@ If you find a bug (failure of a module to execute its intended function), kindly
 If you'd like to request a new function, feel free to do so by opening an issue [here](https://github.com/zafarimam8588/Devflow/issues/new). Please include sample queries and their corresponding results.
 
 ## 📞 Contact Us
-
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-ladunjexa-blue?style=flat&logo=linkedin&logoColor=b0c0c0&labelColor=363D44)](https://www.linkedin.com/in/zafar-imam-485707135/)
+### Linkdin
+https://www.linkedin.com/in/zafar-imam-485707135/
+### Email
+dev.zafarimam.com
 
